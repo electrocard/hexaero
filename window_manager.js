@@ -99,3 +99,4 @@ document.querySelector('.open-web').addEventListener('click', () => {
         fetchPageData(url);
     }
 });
+ 
