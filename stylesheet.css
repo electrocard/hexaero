@@ -58,7 +58,7 @@ body{
     padding: 0;
     width: 100%;
     height: 100vh;
-    background-image: url("./assets/logon.jpg");
+    background-image: url("resource/assets/logon.jpg");
     background-size: cover;
     background-position: center bottom;
     background-repeat: no-repeat;

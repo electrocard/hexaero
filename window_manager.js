@@ -67,6 +67,7 @@ function createWindow(icon, title, content) {
     closeButton.setAttribute('aria-label', 'Close');
     closeButton.addEventListener('click', () => {
         windowElement.remove(); // Supprimer la fenêtre quand on clique sur "fermer"
+        removeTaskbarButton(windowId); // Supprimer le bouton dans la barre des tâches
     });
     windowControls.appendChild(closeButton);
 
@@ -101,11 +102,46 @@ function createWindow(icon, title, content) {
 
     // Ajouter les événements pour redimensionner la fenêtre
     makeResizable(windowElement);
+
+    // Créer un bouton dans la barre des tâches (dans la div de class taskbaricons)
+    createTaskbarButton(windowId, icon, title);
+}
+
+// Fonction pour créer un bouton dans la barre des tâches
+function createTaskbarButton(windowId, icon, title) {
+    const taskbarIcons = document.querySelector('.taskbaricons'); // Assurez-vous qu'il y a une div avec la classe "taskbaricons"
+    const taskbarButton = document.createElement('button');
+    taskbarButton.classList.add('taskbarbutton');
+    taskbarButton.classList.add('taskbarfocused');
+    taskbarButton.classList.add(windowId); // Ajouter l'ID de la fenêtre pour pouvoir le retrouver
+
+    // Créer l'icône pour le bouton de la barre des tâches
+    const taskbarIcon = document.createElement('img');
+    taskbarIcon.classList.add('taskbaricon');
+    taskbarIcon.src = icon;
+    taskbarIcon.setAttribute('draggable', 'false');
+    taskbarButton.appendChild(taskbarIcon);
+
+    // Ajouter un événement pour amener la fenêtre au premier plan
+    taskbarButton.addEventListener('click', () => {
+        const windowElement = document.getElementById(windowId);
+        bringToFront(windowElement); // Mettre cette fenêtre au premier plan quand on clique sur le bouton
+    });
+
+    // Ajouter le bouton à la div taskbaricons
+    taskbarIcons.appendChild(taskbarButton);
+}
+
+// Fonction pour supprimer un bouton de la barre des tâches
+function removeTaskbarButton(windowId) {
+    const taskbarButton = document.querySelector(`.taskbarbutton.${windowId}`);
+    if (taskbarButton) {
+        taskbarButton.remove(); // Supprimer le bouton de la barre des tâches
+    }
 }
 
 // Fonction pour amener la fenêtre au premier plan
 function bringToFront(windowElement) {
-    // Récupérer l'index actuel de la fenêtre (basé sur le z-index)
     const allWindows = document.querySelectorAll('.window');
     let maxZIndex = 0;
     allWindows.forEach(win => {
@@ -123,33 +159,27 @@ function bringToFront(windowElement) {
 function makeResizable(windowElement) {
     const resizeHandle = windowElement.querySelector('.resize-handle');
 
-    // Écouter le début de l'opération de redimensionnement
     resizeHandle.addEventListener('mousedown', (e) => {
         e.preventDefault();
 
-        // Initialiser les coordonnées de la souris
         const initialWidth = windowElement.offsetWidth;
         const initialHeight = windowElement.offsetHeight;
         const initialX = e.clientX;
         const initialY = e.clientY;
 
-        // Ajouter un événement de mouvement pour redimensionner
         const onMouseMove = (e) => {
             const deltaX = e.clientX - initialX;
             const deltaY = e.clientY - initialY;
 
-            // Mettre à jour la taille de la fenêtre
             windowElement.style.width = `${initialWidth + deltaX}px`;
             windowElement.style.height = `${initialHeight + deltaY}px`;
         };
 
-        // Ajouter un événement pour arrêter le redimensionnement
         const onMouseUp = () => {
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };
 
-        // Attacher les événements de déplacement et de relâchement de souris
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
     });
@@ -157,7 +187,7 @@ function makeResizable(windowElement) {
 
 // Gestionnaire d'événements pour le bouton
 document.querySelector('.open-web').addEventListener('click', () => {
-    const url = prompt("Entrez l'URL de la page web à ouvrir :");
+    const url = prompt("Entrez l'URL de la page web à ouvrir : \nne marche pas avec toutes les pages");
     if (url) {
         fetchPageData(url);
     }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Frutiger Aero Web</title>
+  <title>Windows Aero</title>
   <link rel="stylesheet" href="aero.css?v=105">
   <link rel="stylesheet" href="window_manager.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
     padding: 0;
     width: 100%;
     height: 100vh;
-    background-image: url("./assets/logon.png");
+    background-image: url("resource/assets/logon.png");
     background-size: cover;
     background-position: center bottom;
     background-repeat: no-repeat;
@@ -42,29 +42,14 @@
     it will stick. -->
     <div class="startorb"></div>
       <div class="taskbaricons" id="taskbaricons">
-        <button class="taskbarbutton taskbarfocused"><img class="taskbaricon" draggable="false" src="./icons/information.png"></button>
-        <button class="taskbarbutton taskbarfocused open-web"><img class="taskbaricon" draggable="false" src="resource/icon/computer.ico"></button>
+        <button class="taskbarbutton taskbarfocused"><img class="taskbaricon" draggable="false" src="resource/icons/information.png"></button>
+        <button class="taskbarbutton taskbarfocused open-web"><img class="taskbaricon" draggable="false" src="resource/icons/computer.ico"></button>
       </div>
       <div class="datetime"></div>
       <div class="aeropeek"></div>
   </div>
 
-<!-- Window 1 -->
-<div class="window" style="width: 600px" id="window1">
-  <div class="title-bar" id="window1header">
-    <img aria-label="windowicon" src="./icons/information.png">
-    <div class="title-bar-text">A Window With Stuff In It</div>
-    <div class="title-bar-controls">
-      <button aria-label="Minimize"></button>
-      <button aria-label="Maximize"></button>
-      <button aria-label="Close"></button>
-    </div>
-  </div>
-  <div class="window-body" style="height:245px;">
-    <p>hello</p>
-    <button>OK</button>
-  </div>
-</div>
+
 
 <!-- Window 2 
 <div class="window" style="width: 600px" id="window2">
