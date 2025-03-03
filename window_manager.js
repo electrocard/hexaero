@@ -1,9 +1,9 @@
 // Fonction pour récupérer les données de la page Web (titre, icône) via un proxy
 function fetchPageData(url) {
-    const proxyUrl = "https://cors-anywhere.herokuapp.com/"; // Proxy pour contourner CORS
+    const proxyUrl = "https://api.allorigins.win/raw?url=";  // Proxy pour contourner CORS
     const targetUrl = encodeURIComponent(url); // Encodage de l'URL
 
-    fetch(proxyUrl + url)
+    fetch(proxyUrl + targetUrl) // Utilisation du proxy
         .then(response => response.text())
         .then(data => {
             const parser = new DOMParser();
@@ -85,11 +85,74 @@ function createWindow(icon, title, content) {
     windowElement.appendChild(windowHeader);
     windowElement.appendChild(windowBody);
 
+    // Ajouter un coin de redimensionnement en bas à droite
+    const resizeHandle = document.createElement('div');
+    resizeHandle.classList.add('resize-handle');
+    windowElement.appendChild(resizeHandle);
+
     // Ajouter la fenêtre à la page
     document.body.appendChild(windowElement);
 
     // Appliquer le drag à la nouvelle fenêtre
     dragElement(windowElement);
+
+    // Ajouter l'événement pour mettre au premier plan la fenêtre
+    windowElement.addEventListener('click', () => bringToFront(windowElement));
+
+    // Ajouter les événements pour redimensionner la fenêtre
+    makeResizable(windowElement);
+}
+
+// Fonction pour amener la fenêtre au premier plan
+function bringToFront(windowElement) {
+    // Récupérer l'index actuel de la fenêtre (basé sur le z-index)
+    const allWindows = document.querySelectorAll('.window');
+    let maxZIndex = 0;
+    allWindows.forEach(win => {
+        const zIndex = parseInt(window.getComputedStyle(win).zIndex, 10);
+        if (zIndex > maxZIndex) {
+            maxZIndex = zIndex;
+        }
+    });
+
+    // Assigner un z-index supérieur à la fenêtre cliquée
+    windowElement.style.zIndex = maxZIndex + 1;
+}
+
+// Fonction pour rendre une fenêtre redimensionnable
+function makeResizable(windowElement) {
+    const resizeHandle = windowElement.querySelector('.resize-handle');
+
+    // Écouter le début de l'opération de redimensionnement
+    resizeHandle.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+
+        // Initialiser les coordonnées de la souris
+        const initialWidth = windowElement.offsetWidth;
+        const initialHeight = windowElement.offsetHeight;
+        const initialX = e.clientX;
+        const initialY = e.clientY;
+
+        // Ajouter un événement de mouvement pour redimensionner
+        const onMouseMove = (e) => {
+            const deltaX = e.clientX - initialX;
+            const deltaY = e.clientY - initialY;
+
+            // Mettre à jour la taille de la fenêtre
+            windowElement.style.width = `${initialWidth + deltaX}px`;
+            windowElement.style.height = `${initialHeight + deltaY}px`;
+        };
+
+        // Ajouter un événement pour arrêter le redimensionnement
+        const onMouseUp = () => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        };
+
+        // Attacher les événements de déplacement et de relâchement de souris
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
 }
 
 // Gestionnaire d'événements pour le bouton
@@ -99,4 +162,3 @@ document.querySelector('.open-web').addEventListener('click', () => {
         fetchPageData(url);
     }
 });
- 

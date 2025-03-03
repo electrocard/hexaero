@@ -1,0 +1,24 @@
+/* Style pour le corps de la fenêtre */
+.window-body {
+    flex: 1;  /* Cela permet au corps de la fenêtre de prendre tout l'espace disponible */
+    overflow: hidden;  /* Evite que le contenu dépasse */
+    position: relative;
+}
+
+/* Style pour l'iframe à l'intérieur de la fenêtre */
+.window-body{
+    width: 100%;
+    height: calc(100% - 30px) !important;
+    border: none;
+}
+
+/* Style pour la poignée de redimensionnement */
+.resize-handle {
+    width: 15px;
+    height: 15px;
+    background-color: #333;
+    cursor: se-resize;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
