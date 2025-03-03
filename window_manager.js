@@ -192,3 +192,10 @@ document.querySelector('.open-web').addEventListener('click', () => {
         fetchPageData(url);
     }
 });
+document.querySelector('.open-info').addEventListener('click', () => {
+    const url = "https://frutigeraeroarchive.org/resources";
+    if (url) {
+        fetchPageData(url);
+    }
+});
+
